@@ -19,8 +19,8 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $author = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'articles')]
+    private ?User $author = null;
 
     public function getId(): ?int
     {
@@ -49,12 +49,12 @@ class Article
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?string $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
         return $this;
