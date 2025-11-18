@@ -1,0 +1,20 @@
+{% extends 'Layout/base.html.twig' %}
+
+{% block main %}
+    Home
+    <ul>
+    {% for user in users %}
+        <li>{{ user.email }} {{ user.lastname }}</li>
+    {% endfor %}
+    </ul>
+
+    <div id="articles">
+        {% for article in articles %}
+            <div class="article">
+                <h2>{{ article.title }}</h2>
+                <p>{{ article.content }}</p>
+                <p>{{ article.author }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock main %}
