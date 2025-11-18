@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
@@ -16,7 +17,10 @@ class HomeController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        $users = $entityManager->getRepository(User::class)->findAll();
+        $users = $entityManager->getRepository(User::class)->findBy([
+            'firstname' => 'Jean',
+            'lastname' => 'Martin'
+        ]);
 
         $articles = $entityManager->getRepository(Article::class)->findAll();
 
@@ -24,6 +28,52 @@ class HomeController extends AbstractController
             'users' => $users,
             'articles' => $articles
         ]);
+    }
+
+    #[Route('/create-user', name: 'app_create_user')]
+    public function createUser(EntityManagerInterface $entityManager): Response
+    {
+        $user = new User();
+        $user
+            ->setFirstname('Jean')
+            ->setLastname('Martin')
+            ->setEmail('jeanmartin@gmail.com');
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home_index');
+    }
+
+    #[Route('/update')]
+    public function update(EntityManagerInterface $entityManager): Response
+    {
+        $id = 1;
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (null === $user) {
+            $this->createNotFoundException();
+        }
+
+        $user->setFirstname($user->getFirstname() . ' edited');
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home_index');
+    }
+
+    #[Route('/delete')]
+    public function delete(EntityManagerInterface $entityManager)
+    {
+        $id = 1;
+        $user = $entityManager->getRepository(User::class)->find($id);
+        if (null === $user) {
+            $this->createNotFoundException();
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home_index');
     }
 
     #[Route('/contact/{name}', name: 'app_home_contact')]
