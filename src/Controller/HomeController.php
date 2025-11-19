@@ -17,10 +17,7 @@ class HomeController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        $users = $entityManager->getRepository(User::class)->findBy([
-            'firstname' => 'Jean',
-            'lastname' => 'Martin'
-        ]);
+        $users = $entityManager->getRepository(User::class)->findAll();
 
         $articles = $entityManager->getRepository(Article::class)->findAll();
 
@@ -45,31 +42,18 @@ class HomeController extends AbstractController
         return $this->redirectToRoute('app_home_index');
     }
 
-    #[Route('/update')]
-    public function update(EntityManagerInterface $entityManager): Response
+    #[Route('/update/{id}', name: 'app_home_update', requirements: ['id' => '\d+'])]
+    public function update(EntityManagerInterface $entityManager, User $user): Response
     {
-        $id = 1;
-        $user = $entityManager->getRepository(User::class)->find($id);
-
-        if (null === $user) {
-            $this->createNotFoundException();
-        }
-
         $user->setFirstname($user->getFirstname() . ' edited');
         $entityManager->flush();
 
         return $this->redirectToRoute('app_home_index');
     }
 
-    #[Route('/delete')]
-    public function delete(EntityManagerInterface $entityManager)
+    #[Route('/delete/{id}', name: 'app_home_delete', requirements: ['id' => '\d+'])]
+    public function delete(EntityManagerInterface $entityManager, User $user): Response
     {
-        $id = 1;
-        $user = $entityManager->getRepository(User::class)->find($id);
-        if (null === $user) {
-            $this->createNotFoundException();
-        }
-
         $entityManager->remove($user);
         $entityManager->flush();
 
