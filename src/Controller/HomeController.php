@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\User;
+use App\Form\Type\Article\ArticleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,6 @@ class HomeController extends AbstractController
     ): Response
     {
         $users = $entityManager->getRepository(User::class)->findAll();
-
         $articles = $entityManager->getRepository(Article::class)->findAll();
 
         return $this->render('Page/Home/index.html.twig', [
@@ -31,10 +31,6 @@ class HomeController extends AbstractController
     public function createUser(EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $user
-            ->setFirstname('Jean')
-            ->setLastname('Martin')
-            ->setEmail('jeanmartin@gmail.com');
 
         $entityManager->persist($user);
         $entityManager->flush();
