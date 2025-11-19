@@ -3,6 +3,7 @@
 {% block main %}
     {{ form_start(toto) }}
     {{ form_label(toto.title) }}
-    {{ form_widget(toto.title, {'attr': {'class': 'salut ca va ?'}}) }}
+    {{ form_widget(toto.title) }}
+    {{ form_widget(toto.submit, {'attr': {'class': 'btn btn-success'}}) }}
     {{ form_end(toto) }}
 {% endblock main %}

@@ -28,6 +28,8 @@ class User
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'author')]
     private Collection $articles;
 
+    private ?string $password = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -79,6 +81,17 @@ class User
     public function setArticles(Collection $articles): self
     {
         $this->articles = $articles;
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
         return $this;
     }
 }
