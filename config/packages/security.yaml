@@ -19,14 +19,11 @@ security:
                 check_path: app_login
             logout:
                 path: /logout
-
-    role_hierarchy:
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
-        ROLE_ADMIN: [ROLE_USER]
+            user_checker: App\Security\UserChecker\ConfirmEmailUserChecker
 
     access_control:
-         - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/register, roles: ROLE_ADMIN }
+#         - { path: ^/admin, roles: ROLE_ADMIN }
+#         - { path: ^/register, roles: ROLE_ADMIN }
 
 when@test:
     security:
